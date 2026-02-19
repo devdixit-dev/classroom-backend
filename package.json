@@ -1,23 +1,32 @@
 {
-  "name": "classroom-backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.30.0",
-  "dependencies": {
-    "express": "^5.2.1"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.2.3",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
-  }
+    "name": "classroom-backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "db:generate": "drizzle-kit generate",
+        "build": "tsc",
+        "start": "node dist/server.js",
+        "test": "echo \"Error: no test specified\" \u0026\u0026 exit 1",
+        "db:migrate": "drizzle-kit migrate",
+        "dev": "tsx watch src/index.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "packageManager": "pnpm@10.30.0",
+    "dependencies": {
+        "@neondatabase/serverless": "^1.0.2",
+        "dotenv": "^17.3.1",
+        "drizzle-orm": "^0.45.1",
+        "express": "^5.2.1"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.6",
+        "@types/node": "^25.2.3",
+        "drizzle-kit": "^0.31.9",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3"
+    }
 }
