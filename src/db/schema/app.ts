@@ -50,7 +50,7 @@ export const subjectsRelations = relations(subjects, ({ one, many }) => ({
 
 // set type for type safety
 export type Department = typeof departments.$inferSelect;
-export type newDepartment = typeof departments.$inferInsert;
+export type NewDepartment = typeof departments.$inferInsert;
 
 export type Subject = typeof subjects.$inferSelect;
-export type newSubject = typeof subjects.$inferInsert;
+export type NewSubject = typeof subjects.$inferInsert;
