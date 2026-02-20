@@ -1,59 +1,15 @@
-import { eq } from "drizzle-orm";
-// The 'pool' export will only exist for WebSocket and node-postgres drivers
-import { db, pool } from "./db";
-import { demoUsers } from "./schema";
+import express from "express";
 
-async function main() {
-  try {
-    console.log("Performing CRUD operations...");
+const app = express();
+const PORT = 8000;
 
-    // CREATE: Insert a new user
-    const [newUser] = await db
-      .insert(demoUsers)
-      .values({ name: "Admin User", email: "admin@example.com" })
-      .returning();
+app.use(express.json());
 
-    if (!newUser) {
-      throw new Error("Failed to create user");
-    }
+app.get("/", (_req, res) => {
+  res.json({ message: "Classroom backend is running." });
+});
 
-    console.log("? CREATE: New user created:", newUser);
-
-    // READ: Select the user
-    const foundUser = await db
-      .select()
-      .from(demoUsers)
-      .where(eq(demoUsers.id, newUser.id));
-    console.log("? READ: Found user:", foundUser[0]);
-
-    // UPDATE: Change the user's name
-    const [updatedUser] = await db
-      .update(demoUsers)
-      .set({ name: "Super Admin" })
-      .where(eq(demoUsers.id, newUser.id))
-      .returning();
-
-    if (!updatedUser) {
-      throw new Error("Failed to update user");
-    }
-
-    console.log("? UPDATE: User updated:", updatedUser);
-
-    // DELETE: Remove the user
-    await db.delete(demoUsers).where(eq(demoUsers.id, newUser.id));
-    console.log("? DELETE: User deleted.");
-
-    console.log("\nCRUD operations completed successfully.");
-  } catch (error) {
-    console.error("? Error performing CRUD operations:", error);
-    process.exit(1);
-  } finally {
-    // If the pool exists, end it to close the connection
-    if (pool) {
-      await pool.end();
-      console.log("Database pool closed.");
-    }
-  }
-}
-
-main();
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+  console.log(`Listening at http://localhost:${PORT}/`);
+});
