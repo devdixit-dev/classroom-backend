@@ -1,4 +1,7 @@
+import { and, ilike, or, sql } from 'drizzle-orm';
 import express from 'express';
+import { departments, subjects } from '../db/schema';
+import { db } from '../db/db';
 
 const router = express.Router();
 
@@ -14,6 +17,31 @@ router.get("/", async (req, res) => {
     // how many records skips
 
     const filterConditions = [];
+
+    // if search query exists, filter by subject name or subject code
+    if(search) {
+      filterConditions.push(
+        or(
+          ilike(subjects.name, `%${search}%`),
+          ilike(subjects.code, `%${search}%`)
+        )
+      );
+    }
+
+    // if department filter exists, match department name
+    if(department) {
+      filterConditions.push(ilike(departments.name, `%${department}`));
+    }
+
+    // combine all filters using AND if any exist
+    const whereClause = filterConditions.length > 0
+    // filter array length is > 0
+    ? and(...filterConditions)
+    // then combine all conditions with and
+    : undefined
+    // or undefined
+
+    const countResult = await db.select({count: sql<number>`count(*)`})
   }
   catch(e) {
     console.error(`GET /subjects error: ${e}`);
