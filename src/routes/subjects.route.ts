@@ -1,4 +1,4 @@
-import { and, ilike, or, sql } from 'drizzle-orm';
+import { and, ilike, or, sql, eq } from 'drizzle-orm';
 import express from 'express';
 import { departments, subjects } from '../db/schema';
 import { db } from '../db/db';
@@ -42,6 +42,9 @@ router.get("/", async (req, res) => {
     // or undefined
 
     const countResult = await db.select({count: sql<number>`count(*)`})
+    .from(subjects).leftJoin(
+      departments, eq(subjects.departmentId, departments.id)
+    );
   }
   catch(e) {
     console.error(`GET /subjects error: ${e}`);
